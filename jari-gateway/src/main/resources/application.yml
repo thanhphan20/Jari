@@ -7,30 +7,40 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: lb://jari-user-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - AuthenticationFilter
         - id: user-service
           uri: lb://jari-user-service
           predicates:
             - Path=/api/users/**
           filters:
             - StripPrefix=1
+            - AuthenticationFilter
         - id: project-service
           uri: lb://jari-project-service
           predicates:
             - Path=/api/projects/**
           filters:
             - StripPrefix=1
+            - AuthenticationFilter
         - id: task-service
           uri: lb://jari-task-service
           predicates:
             - Path=/api/tasks/**
           filters:
             - StripPrefix=1
+            - AuthenticationFilter
         - id: notification-service
           uri: lb://jari-notification-service
           predicates:
             - Path=/api/notifications/**
           filters:
             - StripPrefix=1
+            - AuthenticationFilter
 
 eureka:
   client:

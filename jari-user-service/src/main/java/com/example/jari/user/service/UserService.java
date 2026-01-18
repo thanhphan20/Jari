@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserDto createUser(UserDto userDto) {
@@ -26,7 +27,7 @@ public class UserService {
                 .username(userDto.getUsername())
                 .avatarUrl(userDto.getAvatarUrl())
                 .active(true)
-                .password("default") // TODO: Implement proper password hashing
+                .password(passwordEncoder.encode(userDto.getPassword() != null ? userDto.getPassword() : "default"))
                 .build();
 
         User savedUser = userRepository.save(user);
