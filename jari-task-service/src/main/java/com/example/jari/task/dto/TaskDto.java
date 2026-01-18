@@ -4,12 +4,12 @@ import com.example.jari.common.dto.BaseDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskDto extends BaseDto {
