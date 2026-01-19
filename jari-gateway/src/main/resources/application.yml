@@ -4,6 +4,17 @@ server:
 spring:
   application:
     name: jari-gateway
+  springdoc:
+    swagger-ui:
+      urls:
+        - name: User Service
+          url: /user-service/v3/api-docs
+        - name: Project Service
+          url: /project-service/v3/api-docs
+        - name: Task Service
+          url: /task-service/v3/api-docs
+        - name: Notification Service
+          url: /notification-service/v3/api-docs
   cloud:
     gateway:
       routes:
@@ -41,6 +52,31 @@ spring:
           filters:
             - StripPrefix=1
             - AuthenticationFilter
+        # Swagger Documentation Routes
+        - id: user-service-v3-docs
+          uri: lb://jari-user-service
+          predicates:
+            - Path=/user-service/v3/api-docs
+          filters:
+            - RewritePath=/user-service/(?<path>.*), /${path}
+        - id: project-service-v3-docs
+          uri: lb://jari-project-service
+          predicates:
+            - Path=/project-service/v3/api-docs
+          filters:
+            - RewritePath=/project-service/(?<path>.*), /${path}
+        - id: task-service-v3-docs
+          uri: lb://jari-task-service
+          predicates:
+            - Path=/task-service/v3/api-docs
+          filters:
+            - RewritePath=/task-service/(?<path>.*), /${path}
+        - id: notification-service-v3-docs
+          uri: lb://jari-notification-service
+          predicates:
+            - Path=/notification-service/v3/api-docs
+          filters:
+            - RewritePath=/notification-service/(?<path>.*), /${path}
 
 eureka:
   client:

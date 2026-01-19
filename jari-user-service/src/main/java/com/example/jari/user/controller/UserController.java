@@ -3,6 +3,9 @@ package com.example.jari.user.controller;
 import com.example.jari.common.dto.ResponseDto;
 import com.example.jari.user.dto.UserDto;
 import com.example.jari.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "User Controller", description = "APIs for managing users")
 public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Create a new user")
+    @ApiResponse(responseCode = "201", description = "User created successfully")
     @PostMapping
     public ResponseEntity<ResponseDto<UserDto>> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto createdUser = userService.createUser(userDto);
@@ -30,6 +36,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "Get user by ID")
+    @ApiResponse(responseCode = "200", description = "User retrieved successfully")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<UserDto>> getUserById(@PathVariable Long id) {
         UserDto user = userService.getUserById(id);
