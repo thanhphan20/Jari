@@ -50,6 +50,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Get All Users")
+    @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
     @GetMapping
     public ResponseEntity<ResponseDto<List<UserDto>>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
@@ -62,6 +64,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Update User")
+    @ApiResponse(responseCode = "200", description = "User updated successfully")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto<UserDto>> updateUser(
             @PathVariable Long id,
@@ -76,6 +80,8 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Delete User")
+    @ApiResponse(responseCode = "200", description = "User deleted successfully")
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto<Void>> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
