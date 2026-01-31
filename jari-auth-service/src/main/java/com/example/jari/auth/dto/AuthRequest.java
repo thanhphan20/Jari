@@ -1,4 +1,4 @@
-package com.example.jari.user.dto;
+package com.example.jari.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

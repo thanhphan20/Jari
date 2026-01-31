@@ -7,6 +7,8 @@ spring:
   springdoc:
     swagger-ui:
       urls:
+        - name: Auth Service
+          url: /auth-service/v3/api-docs
         - name: User Service
           url: /user-service/v3/api-docs
         - name: Project Service
@@ -19,11 +21,10 @@ spring:
     gateway:
       routes:
         - id: auth-service
-          uri: lb://jari-user-service
+          uri: lb://jari-auth-service
           predicates:
             - Path=/auth/**
-          filters:
-            - AuthenticationFilter
+          # No AuthenticationFilter for auth routes
         - id: user-service
           uri: lb://jari-user-service
           predicates:
@@ -77,6 +78,12 @@ spring:
             - Path=/notification-service/v3/api-docs
           filters:
             - RewritePath=/notification-service/(?<path>.*), /${path}
+        - id: auth-service-v3-docs
+          uri: lb://jari-auth-service
+          predicates:
+            - Path=/auth-service/v3/api-docs
+          filters:
+            - RewritePath=/auth-service/(?<path>.*), /${path}
 
 eureka:
   client:

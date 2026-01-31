@@ -1,9 +1,10 @@
-package com.example.jari.user.service;
+package com.example.jari.auth.service;
 
+import com.example.jari.auth.dto.AuthRequest;
+import com.example.jari.auth.entity.User;
+import com.example.jari.auth.repository.UserRepository;
 import com.example.jari.common.utils.JwtUtils;
-import com.example.jari.user.dto.AuthRequest;
-import com.example.jari.user.entity.User;
-import com.example.jari.user.repository.UserRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +27,16 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     public String saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        
+        // Send message to user-service to create profile
+        rabbitTemplate.convertAndSend("user.exchange", "user.registration", user);
+        
         return "user added to the system";
     }
 

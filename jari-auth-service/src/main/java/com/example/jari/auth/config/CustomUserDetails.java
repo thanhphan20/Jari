@@ -1,16 +1,17 @@
-package com.example.jari.user.config;
+package com.example.jari.auth.config;
 
-import com.example.jari.user.entity.User;
+import com.example.jari.auth.entity.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
 
     public CustomUserDetails(User user) {
         this.username = user.getUsername();
@@ -19,8 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // For now, returning an empty list. You can add roles here later.
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

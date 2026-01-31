@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: 'mysql:latest'
+    image: 'mysql:8.0'
     container_name: jari-mysql
     environment:
       - 'MYSQL_ROOT_PASSWORD=root'
@@ -13,6 +13,16 @@ services:
     networks:
       - jari-network
 
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    container_name: jari-rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - jari-network
+    restart: always
+
   eureka-discovery:
     build:
       context: .
@@ -23,6 +33,7 @@ services:
       - '8761:8761'
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-discovery:8761/eureka/
     depends_on:
       - mysql
     networks:
@@ -46,6 +57,29 @@ services:
       - jari-network
     restart: always
 
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: auth-service
+    container_name: jari-auth-service
+    ports:
+      - '8081:8081'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jari_auth?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-discovery:8761/eureka/
+    depends_on:
+      - mysql
+      - rabbitmq
+      - eureka-discovery
+    networks:
+      - jari-network
+    restart: always
+
   user-service:
     build:
       context: .
@@ -53,15 +87,17 @@ services:
       target: user-service
     container_name: jari-user-service
     ports:
-      - '8081:8081'
+      - '8082:8082'
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jari_user?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_RABBITMQ_HOST=rabbitmq
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-discovery:8761/eureka/
     depends_on:
       - mysql
+      - rabbitmq
       - eureka-discovery
     networks:
       - jari-network
@@ -74,7 +110,7 @@ services:
       target: project-service
     container_name: jari-project-service
     ports:
-      - '8082:8082'
+      - '8083:8083'
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jari_project?createDatabaseIfNotExist=true
@@ -95,7 +131,7 @@ services:
       target: task-service
     container_name: jari-task-service
     ports:
-      - '8083:8083'
+      - '8084:8084'
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jari_task?createDatabaseIfNotExist=true
@@ -116,7 +152,7 @@ services:
       target: notification-service
     container_name: jari-notification-service
     ports:
-      - '8084:8084'
+      - '8085:8085'
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/jari_notification?createDatabaseIfNotExist=true

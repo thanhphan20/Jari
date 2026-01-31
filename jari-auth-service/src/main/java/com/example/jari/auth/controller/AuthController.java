@@ -1,9 +1,8 @@
-package com.example.jari.user.controller;
+package com.example.jari.auth.controller;
 
-import com.example.jari.user.dto.AuthRequest;
-import com.example.jari.user.dto.UserDto;
-import com.example.jari.user.service.AuthService;
-import com.example.jari.user.service.UserService;
+import com.example.jari.auth.dto.AuthRequest;
+import com.example.jari.auth.entity.User;
+import com.example.jari.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
     @PostMapping("/register")
-    public String addNewUser(@RequestBody UserDto userDto) {
-        // We use UserService here which now handles password encoding in createUser
-        userService.createUser(userDto);
-        return "User connected to the system";
+    public String addNewUser(@RequestBody User user) {
+        return authService.saveUser(user);
     }
 
     @PostMapping("/token")
