@@ -5,17 +5,17 @@ spring:
   application:
     name: jari-task-service
   datasource:
-    url: jdbc:mysql://localhost:3306/jari_task?createDatabaseIfNotExist=true
-    username: root
-    password:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/jari_task
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
 eureka:

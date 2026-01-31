@@ -5,10 +5,10 @@ spring:
   application:
     name: jari-auth-service
   datasource:
-    url: jdbc:mysql://localhost:3306/jari_db
-    username: root
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/jari_auth
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,7 +16,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   rabbitmq:
     host: localhost
     port: 5672
