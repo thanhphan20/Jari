@@ -2,21 +2,10 @@ server:
   port: 8080
 
 spring:
+  main:
+    web-application-type: reactive
   application:
     name: jari-gateway
-  springdoc:
-    swagger-ui:
-      urls:
-        - name: Auth Service
-          url: /auth-service/v3/api-docs
-        - name: User Service
-          url: /user-service/v3/api-docs
-        - name: Project Service
-          url: /project-service/v3/api-docs
-        - name: Task Service
-          url: /task-service/v3/api-docs
-        - name: Notification Service
-          url: /notification-service/v3/api-docs
   cloud:
     gateway:
       routes:
@@ -57,33 +46,47 @@ spring:
         - id: user-service-v3-docs
           uri: lb://jari-user-service
           predicates:
-            - Path=/user-service/v3/api-docs
+            - Path=/v3/api-docs/user-service
           filters:
-            - RewritePath=/user-service/(?<path>.*), /${path}
+            - RewritePath=/v3/api-docs/user-service, /v3/api-docs
         - id: project-service-v3-docs
           uri: lb://jari-project-service
           predicates:
-            - Path=/project-service/v3/api-docs
+            - Path=/v3/api-docs/project-service
           filters:
-            - RewritePath=/project-service/(?<path>.*), /${path}
+            - RewritePath=/v3/api-docs/project-service, /v3/api-docs
         - id: task-service-v3-docs
           uri: lb://jari-task-service
           predicates:
-            - Path=/task-service/v3/api-docs
+            - Path=/v3/api-docs/task-service
           filters:
-            - RewritePath=/task-service/(?<path>.*), /${path}
+            - RewritePath=/v3/api-docs/task-service, /v3/api-docs
         - id: notification-service-v3-docs
           uri: lb://jari-notification-service
           predicates:
-            - Path=/notification-service/v3/api-docs
+            - Path=/v3/api-docs/notification-service
           filters:
-            - RewritePath=/notification-service/(?<path>.*), /${path}
+            - RewritePath=/v3/api-docs/notification-service, /v3/api-docs
         - id: auth-service-v3-docs
           uri: lb://jari-auth-service
           predicates:
-            - Path=/auth-service/v3/api-docs
+            - Path=/v3/api-docs/auth-service
           filters:
-            - RewritePath=/auth-service/(?<path>.*), /${path}
+            - RewritePath=/v3/api-docs/auth-service, /v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Auth Service
+        url: /v3/api-docs/auth-service
+      - name: User Service
+        url: /v3/api-docs/user-service
+      - name: Project Service
+        url: /v3/api-docs/project-service
+      - name: Task Service
+        url: /v3/api-docs/task-service
+      - name: Notification Service
+        url: /v3/api-docs/notification-service
 
 eureka:
   client:

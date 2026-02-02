@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+@org.springframework.context.annotation.ComponentScan(basePackages = {"com.example.jari.gateway", "com.example.jari.common"})
 public class GatewayApplication {
 
     public static void main(String[] args) {
